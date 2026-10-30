@@ -1,7 +1,0 @@
-pillow
-numpy
-segno
-# optional, only to re-render the logo from brand/bitx-logo.svg:
-# playwright  (then: python -m playwright install chromium)
-# optional, only for the QR check in CLAUDE.md:
-# opencv-python-headless
