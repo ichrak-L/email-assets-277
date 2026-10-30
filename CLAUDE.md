@@ -6,7 +6,8 @@ Every file in the repo root is public and is loaded by recipients' email clients
 
 ## How it works
 
-- `tools/team.csv` lists everyone (slug, name, title, email, phone, phone_kind, photo, crop).
+- `tools/team.csv` lists everyone (slug, name, title, email, phone, phone_kind, photo, crop, last_name).
+  `last_name` is optional; fill it only for multi-word surnames (e.g. "El May") so the QR contact card splits the name correctly.
 - `tools/generate.py` builds, for each person, into the repo root:
   `circle-<slug>@2x.png`, `qr-<slug>@2x.png`, `signature-<slug>.html`, `<slug>.html` (the "copy my signature" page),
   plus the shared `logo-bitx@2x.png` and `icon-pin@2x.png`.
@@ -37,8 +38,8 @@ Playwright is optional; without it the committed `logo-bitx@2x.png` is reused. O
 ## Adding or changing a person
 
 - New person: add a row to `tools/team.csv` and a front-facing photo in `tools/photos/<slug>.jpg`
-  (square, 400 to 800 px; crop it before committing if needed). `phone_kind` is `whatsapp` (wa.me link)
-  or `phone` (tel: link).
+  (square, 400 to 800 px; crop it before committing if needed). `phone_kind` is always `whatsapp`
+  (WhatsApp icon, wa.me link): every BITX number is a WhatsApp number. `phone` (tel: link) exists but is unused.
 - Photo framing: the `crop` column takes `left top right bottom` in source-photo pixels. Negative or
   out-of-range values extend the plain background (used for headroom). Leave empty to use the full square.
 - After generating, check the QR code decodes (optional):
