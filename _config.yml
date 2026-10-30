@@ -1,0 +1,4 @@
+# GitHub Pages: do not publish the generator inputs on the website (they remain visible in the public repo).
+exclude:
+  - tools
+  - CLAUDE.md
