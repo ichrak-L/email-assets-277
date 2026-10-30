@@ -40,6 +40,7 @@ Playwright is optional; without it the committed `logo-bitx@2x.png` is reused. O
 - New person: add a row to `tools/team.csv` and a front-facing photo in `tools/photos/<slug>.jpg`
   (square, 400 to 800 px; crop it before committing if needed). `phone_kind` is always `whatsapp`
   (WhatsApp icon, wa.me link): every BITX number is a WhatsApp number. `phone` (tel: link) exists but is unused.
+  If a person has no phone, leave `phone` empty: the phone line and the QR phone entry are left out.
 - Photo framing: the `crop` column takes `left top right bottom` in source-photo pixels. Negative or
   out-of-range values extend the plain background (used for headroom). Leave empty to use the full square.
 - After generating, check the QR code decodes (optional):
