@@ -92,10 +92,14 @@ def pin_icon(dst, size=28):
     out.resize((size, size), Image.LANCZOS).save(dst)
 
 def qr(p, dst, size=130):
-    parts = p["name"].replace("Dr ", "").rsplit(" ", 1); first, last = (parts + [""])[:2] if len(parts) == 2 else (parts[0], "")
+    full = p["name"].replace("Dr ", "")
+    if p.get("last_name"):                          # optional column for multi-word surnames, e.g. "El May"
+        last = p["last_name"]; first = full[: -len(last)].strip() if full.endswith(last) else full
+    else:
+        parts = full.rsplit(" ", 1); first, last = (parts[0], parts[1]) if len(parts) == 2 else (parts[0], "")
     # Compact vCard (LF line endings, no TYPE params) keeps the code at a low version so it scans small.
     data = "\n".join(["BEGIN:VCARD", "VERSION:3.0", f"N:{last};{first}", f"FN:{p['name']}", "ORG:BITX S.L.",
-                      f"TEL:{digits(p['phone'], plus=True)}", f"EMAIL:{p['email']}",
+                      *([f"TEL:{digits(p['phone'], plus=True)}"] if p.get("phone") else []), f"EMAIL:{p['email']}",
                       "END:VCARD"])   # title and website left out: both are printed beside the code; a shorter card keeps it scannable at 96 px
     q = segno.make(data, error="l", micro=False)
     n = q.symbol_size(scale=1, border=1)[0]
@@ -146,8 +150,8 @@ def signature_html(p, base, logo_w):
     text = (f'<div style="font-family:{FONT};font-size:15px;line-height:18px;font-weight:700;letter-spacing:-0.1px;color:{INK};white-space:nowrap;">{name}</div>'
             f'<div style="font-family:{FONT};font-size:10px;line-height:13px;color:{INK};padding-top:2px;white-space:nowrap;">{title}</div>'
             f'<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-top:10px;">'
-            + icon_row(ph_icon, ph_alt, ph_href, html.escape(p["phone"]), base)
-            + icon_row("icon-mail@2x.png", "Email", "mailto:" + p["email"], html.escape(p["email"]), base, top=4)
+            + (icon_row(ph_icon, ph_alt, ph_href, html.escape(p["phone"]), base) if p.get("phone") else "")   # no phone: row omitted
+            + icon_row("icon-mail@2x.png", "Email", "mailto:" + p["email"], html.escape(p["email"]), base, top=4 if p.get("phone") else 0)
             + "</table>")
     info = (f'<img src="{base}logo-bitx@2x.png" width="{logo_w}" height="18" alt="BITX" style="display:block;width:{logo_w}px;height:18px;border:0;">'
             f'<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-top:12px;">'
